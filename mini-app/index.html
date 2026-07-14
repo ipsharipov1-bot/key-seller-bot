@@ -1,638 +1,666 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>VanessPay — AI решения</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        :root {
-            --bg-color: #0a0a0f;
-            --card-bg: #13131a;
-            --accent: #6366f1;
-            --accent-hover: #818cf8;
-            --text-primary: #ffffff;
-            --text-secondary: #a1a1aa;
-            --border: #27272a;
-            --success: #22c55e;
-            --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-        }
+      :root {
+        --bg-color: #0a0a0f;
+        --card-bg: #13131a;
+        --accent: #6366f1;
+        --accent-hover: #818cf8;
+        --text-primary: #ffffff;
+        --text-secondary: #a1a1aa;
+        --border: #27272a;
+        --success: #22c55e;
+        --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-color);
-            color: var(--text-primary);
-            min-height: 100vh;
-            padding-bottom: 80px;
-        }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--bg-color);
+        color: var(--text-primary);
+        min-height: 100vh;
+        padding-bottom: 80px;
+      }
 
-        /* Header */
-        .header {
-            background: var(--card-bg);
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+      /* Header */
+      .header {
+        background: var(--card-bg);
+        padding: 20px;
+        text-align: center;
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
 
-        .header-logo {
-            font-size: 24px;
-            font-weight: 700;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+      .header-logo {
+        font-size: 24px;
+        font-weight: 700;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
 
-        .header-subtitle {
-            color: var(--text-secondary);
-            font-size: 12px;
-            margin-top: 4px;
-        }
+      .header-subtitle {
+        color: var(--text-secondary);
+        font-size: 12px;
+        margin-top: 4px;
+      }
 
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 4px;
-            padding: 12px 16px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            background: var(--bg-color);
-            position: sticky;
-            top: 80px;
-        }
+      /* Tabs */
+      .tabs {
+        display: flex;
+        gap: 4px;
+        padding: 12px 16px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        background: var(--bg-color);
+        position: sticky;
+        top: 80px;
+      }
 
-        .tabs::-webkit-scrollbar {
-            display: none;
-        }
+      .tabs::-webkit-scrollbar {
+        display: none;
+      }
 
-        .tab {
-            padding: 10px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: var(--card-bg);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-            min-width: fit-content;
-        }
+      .tab {
+        padding: 10px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: var(--card-bg);
+        color: var(--text-secondary);
+        border: 1px solid var(--border);
+        min-width: fit-content;
+      }
 
-        .tab.active {
-            background: var(--gradient);
-            color: white;
-            border-color: transparent;
-        }
+      .tab.active {
+        background: var(--gradient);
+        color: white;
+        border-color: transparent;
+      }
 
-        /* Content */
-        .content {
-            padding: 16px;
-        }
+      /* Content */
+      .content {
+        padding: 16px;
+      }
 
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
+      .tab-content {
+        display: none;
+        animation: fadeIn 0.3s ease;
+      }
 
-        .tab-content.active {
-            display: block;
-        }
+      .tab-content.active {
+        display: block;
+      }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
         }
-
-        /* Cards */
-        .card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-            border: 1px solid var(--border);
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
-        .card-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+      /* Cards */
+      .card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 16px;
+        border: 1px solid var(--border);
+      }
 
-        .card-text {
-            color: var(--text-secondary);
-            font-size: 14px;
-            line-height: 1.6;
-        }
+      .card-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-        /* Feature List */
-        .feature-list {
-            list-style: none;
-            margin-top: 16px;
-        }
+      .card-text {
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 1.6;
+      }
 
-        .feature-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
-        }
+      /* Feature List */
+      .feature-list {
+        list-style: none;
+        margin-top: 16px;
+      }
 
-        .feature-item:last-child {
-            border-bottom: none;
-        }
+      .feature-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border);
+      }
 
-        .feature-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
+      .feature-item:last-child {
+        border-bottom: none;
+      }
 
-        .feature-text h4 {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
+      .feature-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: var(--gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+      }
 
-        .feature-text p {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
+      .feature-text h4 {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
 
-        /* Stats */
+      .feature-text p {
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+
+      /* Stats */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .stat-card {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 16px;
+        text-align: center;
+        border: 1px solid var(--border);
+      }
+
+      .stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .stat-label {
+        font-size: 11px;
+        color: var(--text-secondary);
+        margin-top: 4px;
+      }
+
+      /* Reviews */
+      .review-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 12px;
+        border: 1px solid var(--border);
+      }
+
+      .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .review-author {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .review-stars {
+        color: #fbbf24;
+        font-size: 12px;
+      }
+
+      .review-text {
+        font-size: 13px;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+
+      /* FAQ */
+      .faq-item {
+        background: var(--card-bg);
+        border-radius: 12px;
+        margin-bottom: 8px;
+        border: 1px solid var(--border);
+        overflow: hidden;
+      }
+
+      .faq-question {
+        padding: 16px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .faq-question::after {
+        content: "+";
+        font-size: 20px;
+        color: var(--accent);
+        transition: transform 0.3s;
+      }
+
+      .faq-item.open .faq-question::after {
+        transform: rotate(45deg);
+      }
+
+      .faq-answer {
+        padding: 0 16px;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        font-size: 13px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+
+      .faq-item.open .faq-answer {
+        padding: 0 16px 16px;
+        max-height: 500px;
+      }
+
+      /* Guarantees */
+      .guarantee-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .guarantee-item:last-child {
+        border-bottom: none;
+      }
+
+      .guarantee-check {
+        width: 24px;
+        height: 24px;
+        background: var(--success);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        flex-shrink: 0;
+      }
+
+      .guarantee-text {
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .guarantee-text strong {
+        display: block;
+        margin-bottom: 2px;
+      }
+
+      /* CTA Button */
+      .cta-button {
+        display: block;
+        width: 100%;
+        padding: 16px;
+        background: var(--gradient);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        margin-top: 20px;
+      }
+
+      /* Mobile adjustments */
+      @media (max-width: 380px) {
         .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 16px;
+          grid-template-columns: 1fr;
         }
+      }
 
-        .stat-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
+      /* Loading animation */
+      .skeleton {
+        background: linear-gradient(
+          90deg,
+          var(--card-bg) 25%,
+          var(--border) 50%,
+          var(--card-bg) 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        border-radius: 8px;
+        height: 100px;
+      }
 
-        .stat-value {
-            font-size: 28px;
-            font-weight: 700;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
         }
-
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-top: 4px;
+        100% {
+          background-position: 200% 0;
         }
-
-        /* Reviews */
-        .review-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border);
-        }
-
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .review-author {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .review-stars {
-            color: #fbbf24;
-            font-size: 12px;
-        }
-
-        .review-text {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        /* FAQ */
-        .faq-item {
-            background: var(--card-bg);
-            border-radius: 12px;
-            margin-bottom: 8px;
-            border: 1px solid var(--border);
-            overflow: hidden;
-        }
-
-        .faq-question {
-            padding: 16px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .faq-question::after {
-            content: '+';
-            font-size: 20px;
-            color: var(--accent);
-            transition: transform 0.3s;
-        }
-
-        .faq-item.open .faq-question::after {
-            transform: rotate(45deg);
-        }
-
-        .faq-answer {
-            padding: 0 16px;
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        .faq-item.open .faq-answer {
-            padding: 0 16px 16px;
-            max-height: 500px;
-        }
-
-        /* Guarantees */
-        .guarantee-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 14px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .guarantee-item:last-child {
-            border-bottom: none;
-        }
-
-        .guarantee-check {
-            width: 24px;
-            height: 24px;
-            background: var(--success);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            flex-shrink: 0;
-        }
-
-        .guarantee-text {
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .guarantee-text strong {
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        /* CTA Button */
-        .cta-button {
-            display: block;
-            width: 100%;
-            padding: 16px;
-            background: var(--gradient);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            margin-top: 20px;
-        }
-
-        /* Mobile adjustments */
-        @media (max-width: 380px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Loading animation */
-        .skeleton {
-            background: linear-gradient(90deg, var(--card-bg) 25%, var(--border) 50%, var(--card-bg) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 8px;
-            height: 100px;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Header -->
     <header class="header">
-        <div class="header-logo">VanessPay</div>
-        <div class="header-subtitle">Ваш надёжный поставщик AI-решений</div>
+      <div class="header-logo">VanessPay</div>
+      <div class="header-subtitle">Ваш надёжный поставщик AI-решений</div>
     </header>
 
     <!-- Tabs -->
     <nav class="tabs">
-        <div class="tab active" data-tab="about">ℹ️ О нас</div>
-        <div class="tab" data-tab="reviews">⭐ Отзывы</div>
-        <div class="tab" data-tab="faq">❓ FAQ</div>
-        <div class="tab" data-tab="guarantees">🛡️ Гарантии</div>
+      <div class="tab active" data-tab="about">ℹ️ О нас</div>
+      <div class="tab" data-tab="reviews">⭐ Отзывы</div>
+      <div class="tab" data-tab="faq">❓ FAQ</div>
+      <div class="tab" data-tab="guarantees">🛡️ Гарантии</div>
     </nav>
 
     <!-- Content -->
     <main class="content">
-        <!-- О нас -->
-        <div class="tab-content active" id="about">
-            <div class="card">
-                <div class="card-title">🏪 О VanessPay</div>
-                <div class="card-text">
-                    Мы специализируемся на продаже официальных подписок и ключей от ведущих AI-сервисов мира. Работаем с 2022 года и обслужили более 2,000 довольных клиентов.
-                </div>
+      <!-- О нас -->
+      <div class="tab-content active" id="about">
+        <div class="card">
+          <div class="card-title">🏪 О VanessPay</div>
+          <div class="card-text">
+            Мы специализируемся на продаже официальных подписок и ключей от
+            ведущих AI-сервисов мира. Работаем с 2022 года и обслужили более
+            2,000 довольных клиентов.
+          </div>
 
-                <ul class="feature-list">
-                    <li class="feature-item">
-                        <div class="feature-icon">✅</div>
-                        <div class="feature-text">
-                            <h4>100% Официальность</h4>
-                            <p>Все ключи поставляются напрямую от провайдеров</p>
-                        </div>
-                    </li>
-                    <li class="feature-item">
-                        <div class="feature-icon">⚡</div>
-                        <div class="feature-text">
-                            <h4>Моментальная активация</h4>
-                            <p>Ключ приходит в течение 15 минут</p>
-                        </div>
-                    </li>
-                    <li class="feature-item">
-                        <div class="feature-icon">💬</div>
-                        <div class="feature-text">
-                            <h4>Поддержка 24/7</h4>
-                            <p>Всегда на связи и готовы помочь</p>
-                        </div>
-                    </li>
-                    <li class="feature-item">
-                        <div class="feature-icon">🔄</div>
-                        <div class="feature-text">
-                            <h4>Гарантия возврата</h4>
-                            <p>Вернём деньги, если что-то пойдёт не так</p>
-                        </div>
-                    </li>
-                </ul>
+          <ul class="feature-list">
+            <li class="feature-item">
+              <div class="feature-icon">✅</div>
+              <div class="feature-text">
+                <h4>100% Официальность</h4>
+                <p>Все ключи поставляются напрямую от провайдеров</p>
+              </div>
+            </li>
+            <li class="feature-item">
+              <div class="feature-icon">⚡</div>
+              <div class="feature-text">
+                <h4>Моментальная активация</h4>
+                <p>Ключ приходит в течение 15 минут</p>
+              </div>
+            </li>
+            <li class="feature-item">
+              <div class="feature-icon">💬</div>
+              <div class="feature-text">
+                <h4>Поддержка 24/7</h4>
+                <p>Всегда на связи и готовы помочь</p>
+              </div>
+            </li>
+            <li class="feature-item">
+              <div class="feature-icon">🔄</div>
+              <div class="feature-text">
+                <h4>Гарантия возврата</h4>
+                <p>Вернём деньги, если что-то пойдёт не так</p>
+              </div>
+            </li>
+          </ul>
 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value">2,000+</div>
-                        <div class="stat-label">Клиентов</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">4.9</div>
-                        <div class="stat-label">Рейтинг</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">30+</div>
-                        <div class="stat-label">Стран</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">98%</div>
-                        <div class="stat-label">Возвращаются</div>
-                    </div>
-                </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-value">2,000+</div>
+              <div class="stat-label">Клиентов</div>
             </div>
+            <div class="stat-card">
+              <div class="stat-value">4.9</div>
+              <div class="stat-label">Рейтинг</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">30+</div>
+              <div class="stat-label">Стран</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">98%</div>
+              <div class="stat-label">Возвращаются</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Отзывы -->
+      <div class="tab-content" id="reviews">
+        <div class="review-card">
+          <div class="review-header">
+            <span class="review-author">💬 Алексей М., Москва</span>
+            <span class="review-stars">⭐⭐⭐⭐⭐</span>
+          </div>
+          <div class="review-text">
+            «Заказывал ChatGPT Plus на месяц. Ключ пришёл за 10 минут, всё
+            работает идеально. Рекомендую!»
+          </div>
         </div>
 
-        <!-- Отзывы -->
-        <div class="tab-content" id="reviews">
-            <div class="review-card">
-                <div class="review-header">
-                    <span class="review-author">💬 Алексей М., Москва</span>
-                    <span class="review-stars">⭐⭐⭐⭐⭐</span>
-                </div>
-                <div class="review-text">
-                    «Заказывал ChatGPT Plus на месяц. Ключ пришёл за 10 минут, всё работает идеально. Рекомендую!»
-                </div>
-            </div>
-
-            <div class="review-card">
-                <div class="review-header">
-                    <span class="review-author">💬 Екатерина К., Киев</span>
-                    <span class="review-stars">⭐⭐⭐⭐⭐</span>
-                </div>
-                <div class="review-text">
-                    «Пользуюсь Midjourney через VanessPay уже полгода. Никаких проблем, цены адекватные, поддержка отвечает быстро.»
-                </div>
-            </div>
-
-            <div class="review-card">
-                <div class="review-header">
-                    <span class="review-author">💬 Дмитрий В., Алматы</span>
-                    <span class="review-stars">⭐⭐⭐⭐⭐</span>
-                </div>
-                <div class="review-text">
-                    «Получил Gemini Ultra + Veo. Всё официально, можно проверить в своём аккаунте Google. Супер сервис!»
-                </div>
-            </div>
-
-            <div class="review-card">
-                <div class="review-header">
-                    <span class="review-author">💬 Анна С., Минск</span>
-                    <span class="review-stars">⭐⭐⭐⭐⭐</span>
-                </div>
-                <div class="review-text">
-                    «Claude Pro — это просто космос! Спасибо команде за быструю активацию и адекватные цены.»
-                </div>
-            </div>
-
-            <div class="review-card">
-                <div class="review-header">
-                    <span class="review-author">💬 Максим Т., Ташкент</span>
-                    <span class="review-stars">⭐⭐⭐⭐⭐</span>
-                </div>
-                <div class="review-text">
-                    «Заказывал Sora 2 для своего проекта. Результат превзошёл ожидания. Профессиональный подход!»
-                </div>
-            </div>
+        <div class="review-card">
+          <div class="review-header">
+            <span class="review-author">💬 Екатерина К., Киев</span>
+            <span class="review-stars">⭐⭐⭐⭐⭐</span>
+          </div>
+          <div class="review-text">
+            «Пользуюсь Midjourney через VanessPay уже полгода. Никаких проблем,
+            цены адекватные, поддержка отвечает быстро.»
+          </div>
         </div>
 
-        <!-- FAQ -->
-        <div class="tab-content" id="faq">
-            <div class="faq-item">
-                <div class="faq-question">Это официальные ключи?</div>
-                <div class="faq-answer">
-                    Да, мы продаём только официальные подписки от компаний-разработчиков (OpenAI, Google, Anthropic и др.).
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Как быстро придёт ключ?</div>
-                <div class="faq-answer">
-                    Обычно в течение 15 минут после подтверждения оплаты.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Что если ключ не будет работать?</div>
-                <div class="faq-answer">
-                    Гарантируем замену или полный возврат средств в течение 24 часов.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Можно ли продлить подписку?</div>
-                <div class="faq-answer">
-                    Да, просто напишите менеджеру за несколько дней до окончания срока.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Как происходит оплата?</div>
-                <div class="faq-answer">
-                    Оплата через безопасные каналы: криптовалюта, банковская карта, ЮMoney, СБП.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Есть ли скидки?</div>
-                <div class="faq-answer">
-                    Да! При заказе от 3 месяцев — скидка 10%. От 6 месяцев — 15%.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Поддерживаете ли вы клиентов?</div>
-                <div class="faq-answer">
-                    Да, поддержка работает 24/7 через Telegram.
-                </div>
-            </div>
+        <div class="review-card">
+          <div class="review-header">
+            <span class="review-author">💬 Дмитрий В., Алматы</span>
+            <span class="review-stars">⭐⭐⭐⭐⭐</span>
+          </div>
+          <div class="review-text">
+            «Получил Gemini Ultra + Veo. Всё официально, можно проверить в своём
+            аккаунте Google. Супер сервис!»
+          </div>
         </div>
 
-        <!-- Гарантии -->
-        <div class="tab-content" id="guarantees">
-            <div class="card">
-                <div class="card-title">🛡️ Наши гарантии</div>
-
-                <div class="guarantee-item">
-                    <div class="guarantee-check">✓</div>
-                    <div class="guarantee-text">
-                        <strong>Юридическая чистота</strong>
-                        Все операции официальны. Мы работаем в правовом поле.
-                    </div>
-                </div>
-
-                <div class="guarantee-item">
-                    <div class="guarantee-check">✓</div>
-                    <div class="guarantee-text">
-                        <strong>Оригинальные ключи</strong>
-                        Поставляем только официальные подписки от компаний-разработчиков.
-                    </div>
-                </div>
-
-                <div class="guarantee-item">
-                    <div class="guarantee-check">✓</div>
-                    <div class="guarantee-text">
-                        <strong>Конфиденциальность</strong>
-                        Ваши платёжные данные не хранятся на наших серверах.
-                    </div>
-                </div>
-
-                <div class="guarantee-item">
-                    <div class="guarantee-check">✓</div>
-                    <div class="guarantee-text">
-                        <strong>Гарантия работоспособности</strong>
-                        Если ключ не работает — заменим или вернём деньги.
-                    </div>
-                </div>
-
-                <div class="guarantee-item">
-                    <div class="guarantee-check">✓</div>
-                    <div class="guarantee-text">
-                        <strong>Поддержка при настройке</strong>
-                        Поможем активировать и настроить, если возникнут сложности.
-                    </div>
-                </div>
-
-                <div class="guarantee-item">
-                    <div class="guarantee-check">✓</div>
-                    <div class="guarantee-text">
-                        <strong>Прозрачное ценообразование</strong>
-                        Цены без скрытых плалатежей. Что видите — то платите.
-                    </div>
-                </div>
-            </div>
+        <div class="review-card">
+          <div class="review-header">
+            <span class="review-author">💬 Анна С., Минск</span>
+            <span class="review-stars">⭐⭐⭐⭐⭐</span>
+          </div>
+          <div class="review-text">
+            «Claude Pro — это просто космос! Спасибо команде за быструю
+            активацию и адекватные цены.»
+          </div>
         </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <span class="review-author">💬 Максим Т., Ташкент</span>
+            <span class="review-stars">⭐⭐⭐⭐⭐</span>
+          </div>
+          <div class="review-text">
+            «Заказывал Sora 2 для своего проекта. Результат превзошёл ожидания.
+            Профессиональный подход!»
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="tab-content" id="faq">
+        <div class="faq-item">
+          <div class="faq-question">Это официальные ключи?</div>
+          <div class="faq-answer">
+            Да, мы продаём только официальные подписки от компаний-разработчиков
+            (OpenAI, Google, Anthropic и др.).
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">Как быстро придёт ключ?</div>
+          <div class="faq-answer">
+            Обычно в течение 15 минут после подтверждения оплаты.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">Что если ключ не будет работать?</div>
+          <div class="faq-answer">
+            Гарантируем замену или полный возврат средств в течение 24 часов.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">Можно ли продлить подписку?</div>
+          <div class="faq-answer">
+            Да, просто напишите менеджеру за несколько дней до окончания срока.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">Как происходит оплата?</div>
+          <div class="faq-answer">
+            Оплата через безопасные каналы: криптовалюта, банковская карта,
+            ЮMoney, СБП.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">Есть ли скидки?</div>
+          <div class="faq-answer">
+            Да! При заказе от 3 месяцев — скидка 10%. От 6 месяцев — 15%.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">Поддерживаете ли вы клиентов?</div>
+          <div class="faq-answer">
+            Да, поддержка работает 24/7 через Telegram.
+          </div>
+        </div>
+      </div>
+
+      <!-- Гарантии -->
+      <div class="tab-content" id="guarantees">
+        <div class="card">
+          <div class="card-title">🛡️ Наши гарантии</div>
+
+          <div class="guarantee-item">
+            <div class="guarantee-check">✓</div>
+            <div class="guarantee-text">
+              <strong>Юридическая чистота</strong>
+              Все операции официальны. Мы работаем в правовом поле.
+            </div>
+          </div>
+
+          <div class="guarantee-item">
+            <div class="guarantee-check">✓</div>
+            <div class="guarantee-text">
+              <strong>Оригинальные ключи</strong>
+              Поставляем только официальные подписки от компаний-разработчиков.
+            </div>
+          </div>
+
+          <div class="guarantee-item">
+            <div class="guarantee-check">✓</div>
+            <div class="guarantee-text">
+              <strong>Конфиденциальность</strong>
+              Ваши платёжные данные не хранятся на наших серверах.
+            </div>
+          </div>
+
+          <div class="guarantee-item">
+            <div class="guarantee-check">✓</div>
+            <div class="guarantee-text">
+              <strong>Гарантия работоспособности</strong>
+              Если ключ не работает — заменим или вернём деньги.
+            </div>
+          </div>
+
+          <div class="guarantee-item">
+            <div class="guarantee-check">✓</div>
+            <div class="guarantee-text">
+              <strong>Поддержка при настройке</strong>
+              Поможем активировать и настроить, если возникнут сложности.
+            </div>
+          </div>
+
+          <div class="guarantee-item">
+            <div class="guarantee-check">✓</div>
+            <div class="guarantee-text">
+              <strong>Прозрачное ценообразование</strong>
+              Цены без скрытых плалатежей. Что видите — то платите.
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
 
     <script>
-        // Telegram Web App
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
+      // Telegram Web App
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+      tg.expand();
 
-        // Tabs functionality
-        const tabs = document.querySelectorAll('.tab');
-        const contents = document.querySelectorAll('.tab-content');
+      // Tabs functionality
+      const tabs = document.querySelectorAll(".tab");
+      const contents = document.querySelectorAll(".tab-content");
 
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const targetId = tab.dataset.tab;
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const targetId = tab.dataset.tab;
 
-                // Update active tab
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
+          // Update active tab
+          tabs.forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
 
-                // Update content
-                contents.forEach(c => c.classList.remove('active'));
-                document.getElementById(targetId).classList.add('active');
-            });
+          // Update content
+          contents.forEach((c) => c.classList.remove("active"));
+          document.getElementById(targetId).classList.add("active");
         });
+      });
 
-        // FAQ accordion
-        document.querySelectorAll('.faq-question').forEach(question => {
-            question.addEventListener('click', () => {
-                const item = question.parentElement;
-                item.classList.toggle('open');
-            });
+      // FAQ accordion
+      document.querySelectorAll(".faq-question").forEach((question) => {
+        question.addEventListener("click", () => {
+          const item = question.parentElement;
+          item.classList.toggle("open");
         });
+      });
 
-        // Mark as fully loaded
-        tg.ready();
+      // Mark as fully loaded
+      tg.ready();
     </script>
-</body>
+  </body>
 </html>
