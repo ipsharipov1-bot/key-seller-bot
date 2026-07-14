@@ -4,6 +4,8 @@ VanessPay — Официальные ключи от нейросетей
 """
 
 import logging
+import sqlite3
+from datetime import datetime
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     Application,
@@ -29,8 +31,94 @@ logger = logging.getLogger(__name__)
 # Получение переменных
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 MANAGER_USERNAME = os.getenv("MANAGER_USERNAME", "manager")
+MANAGER_ID = os.getenv("MANAGER_ID", "")  # Telegram ID менеджера для доступа к админке
 CHANNEL_LINK = os.getenv("CHANNEL_LINK", "https://t.me/vanesspayofficial")
 PAYMENT_LINK = os.getenv("PAYMENT_LINK", "https://t.me/vanesspayer")
+
+# ============================================
+# БАЗА ДАННЫХ
+# ============================================
+
+DB_NAME = "users.db"
+
+def init_db():
+    """Инициализация базы данных пользователей"""
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            user_id INTEGER PRIMARY KEY,
+            username TEXT,
+            first_name TEXT,
+            last_name TEXT,
+            joined_at TEXT,
+            last_activity TEXT,
+            total_messages INTEGER DEFAULT 0
+        )
+    """)
+    
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS broadcast_stats (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            sent_at TEXT,
+            total_recipients INTEGER,
+            success_count INTEGER,
+            failed_count INTEGER,
+            message_preview TEXT
+        )
+    """)
+    
+    conn.commit()
+    conn.close()
+
+def add_user(user_id: int, username: str, first_name: str, last_name: str = None):
+    """Добавить или обновить пользователя"""
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    
+    now = datetime.now().isoformat()
+    
+    cursor.execute("""
+        INSERT OR REPLACE INTO users (user_id, username, first_name, last_name, joined_at, last_activity)
+        VALUES (?, ?, ?, ?, COALESCE((SELECT joined_at FROM users WHERE user_id = ?), ?), ?)
+    """, (user_id, username, first_name, last_name, user_id, now, now))
+    
+    conn.commit()
+    conn.close()
+
+def get_all_users():
+    """Получить всех пользователей"""
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute("SELECT user_id, username, first_name FROM users")
+    users = cursor.fetchall()
+    conn.close()
+    return users
+
+def get_users_count():
+    """Количество пользователей"""
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute("SELECT COUNT(*) FROM users")
+    count = cursor.fetchone()[0]
+    conn.close()
+    return count
+
+def update_user_activity(user_id: int):
+    """Обновить время последней активности"""
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE users 
+        SET last_activity = ?, total_messages = total_messages + 1 
+        WHERE user_id = ?
+    """, (datetime.now().isoformat(), user_id))
+    conn.commit()
+    conn.close()
+
+# Инициализация БД при запуске
+init_db()
 
 # ============================================
 # КОНТЕНТ — ИНФОРМАЦИЯ О КОМПАНИИ
@@ -65,30 +153,6 @@ ABOUT_US = """
 • ⭐ Средний рейтинг: 4.9/5
 • 🕐 Работаем с 2022 года
 • 🌐 География: СНГ, Европа, Азия
-"""
-
-STATISTICS = """
-📊 <b>VanessPay в цифрах:</b>
-
-━━━━━━━━━━━━━━━━━━━━
-
-👥 <b>2,047</b> клиентов обслужено
-
-⭐ <b>4.9/5</b> средний рейтинг
-
-🕐 <b>С 2022 года</b> на рынке
-
-🌍 <b>30+</b> стран доставки
-
-💰 <b>$500K+</b> успешных операций
-
-⏱️ <b>15 мин</b> среднее время активации
-
-🔄 <b>98%</b> клиентов возвращаются
-
-━━━━━━━━━━━━━━━━━━━━
-
-💬 Присоединяйтесь к тысячам довольных пользователей!
 """
 
 GUARANTEES = """
@@ -180,31 +244,6 @@ FAQ = """
 ❓ Не нашли ответ? Напишите менеджеру!
 """
 
-HOW_IT_WORKS = """
-📋 <b>Как это работает</b>
-
-━━━━━━━━━━━━━━━━━━━━
-
-<b>Шаг 1️⃣ — Выберите продукт</b>
-Выберите нужную нейросеть в каталоге и ознакомьтесь с описанием и ценами.
-
-<b>Шаг 2️⃣ — Оформите заказ</b>
-Нажмите «Оплатить сейчас» или напишите менеджеру для уточнения деталей.
-
-<b>Шаг 3️⃣ — Произведите оплату</b>
-Оплатите удобным способом: карта, криптовалюта, СБП, ЮMoney.
-
-<b>Шаг 4️⃣ — Получите ключ</b>
-После подтверждения оплаты вы получите ключ в течение 15 минут.
-
-<b>Шаг 5️⃣ — Активируйте</b>
-Активируйте ключ в личном кабинете сервиса. При необходимости поможем с настройкой!
-
-━━━━━━━━━━━━━━━━━━━━
-
-💬 Готовы начать? Выберите продукт в каталоге!
-"""
-
 # ============================================
 # ПРОДУКТЫ
 # ============================================
@@ -230,11 +269,6 @@ PRODUCTS = {
 • Редактирование и вариации
 • Высокое разрешение
 
-📊 <b>Advanced Data Analysis</b>
-• Анализ данных и код
-• Построение графиков
-• Работа с файлами Excel, CSV
-
 ⚡ <b>Приоритетный доступ</b>
 • Быстрые ответы даже в пиковые часы
 • Ранний доступ к новым функциям
@@ -249,7 +283,6 @@ PRODUCTS = {
 • 3 месяца — $55 <i>(-8%)</i>
 • 6 месяцев — $100 <i>(-17%)</i>
 • 12 месяцев — $180 <i>(-25%)</i>""",
-        "features": ["GPT-4o", "DALL-E 3", "Advanced Analysis", "ПриоритетGPT", "API Access"]
     },
     "gemini": {
         "name": "✨ Gemini Ultra + Veo",
@@ -263,27 +296,15 @@ PRODUCTS = {
 🌟 <b>Gemini 1.5 Ultra</b> — Самая мощная модель Google
 • Контекст до 1 миллиона токенов
 • Работа с длинными документами
-• Мультимодальность (текст, код, видео)
-• Превосходный анализ изображений
+• Мультимодальность
 
 🎬 <b>Veo 2</b> — Генерация видео от Google
 • Реалистичные видео до 60 секунд
-• Различные стили и эффекты
 • Высокое разрешение
-• Продвинутая физика движения
-
-🔍 <b>Deep Research</b>
-• Автоматический поиск и анализ
-• Структурированные отчёты
-• Актуальные данные из сети
-
-📱 <b>Gemini в приложениях Google</b>
-• Интеграция с Gmail, Docs, Sheets
-• Умный поиск в интернете
 
 ━━━━━━━━━━━━━━━━━━━━
 
-💡 <b>Подходит для:</b> исследователей, аналитиков данных, видеокреаторов, разработчиков
+💡 <b>Подходит для:</b> исследователей, аналитиков данных, видеокреаторов
 """,
         "prices": """💰 <b>Тарифы:</b>
 
@@ -291,7 +312,6 @@ PRODUCTS = {
 • 3 месяца — $70 <i>(-7%)</i>
 • 6 месяцев — $130 <i>(-13%)</i>
 • 12 месяцев — $230 <i>(-24%)</i>""",
-        "features": ["Gemini Ultra", "Veo 2 Video", "1M Context", "Deep Research", "Google Integration"]
     },
     "claude": {
         "name": "🎭 Claude Pro",
@@ -304,27 +324,16 @@ PRODUCTS = {
 
 🧬 <b>Claude 3.5 Sonnet</b> — Флагманская модель
 • Контекст до 200K токенов
-• Лучшее понимание логики и нюансов
+• Лучшее понимание логики
 • Превосходный анализ документов
-• Детекция собственных ошибок
 
 💻 <b>Artifact</b> — Интерактивные проекты
 • Создание веб-приложений
-• Интерактивные презентации
 • Генерация и запуск кода
-
-📈 <b>Расширенные лимиты</b>
-• В 5 раз больше сообщений
-• Приоритетный доступ
-• Ранние функции
-
-🔒 <b>Безопасность и конфиденциальность</b>
-• Данные не используются для обучения
-• Корпоративная защита
 
 ━━━━━━━━━━━━━━━━━━━━
 
-💡 <b>Подходит для:</b> программистов, писателей, консультантов, преподавателей
+💡 <b>Подходит для:</b> программистов, писателей, консультантов
 """,
         "prices": """💰 <b>Тарифы:</b>
 
@@ -332,7 +341,6 @@ PRODUCTS = {
 • 3 месяца — $55 <i>(-8%)</i>
 • 6 месяцев — $100 <i>(-17%)</i>
 • 12 месяцев — $180 <i>(-25%)</i>""",
-        "features": ["Claude 3.5 Sonnet", "200K Context", "Artifact", "Priority Access", "Privacy First"]
     },
     "midjourney": {
         "name": "🎨 Midjourney",
@@ -343,37 +351,22 @@ PRODUCTS = {
 
 <b>Что входит в подписку:</b>
 
-🎨 <b>Качество Standard/Basic</b>
+🎨 <b>Качество Standard</b>
 • Быстрая генерация изображений
 • До ~200 изображений в месяц
-• Работа через Discord или Web
-
-🖼️ <b>Стили и возможности</b>
-• Фотореализм высочайшего уровня
 • Все художественные стили
-• Параметры: --ar, --stylize, --chaos
-• Upscale и вариации
-
-⚡ <b>Режимы генерации</b>
-• Relax (без очереди)
-• Turbo (ускоренный)
-• Remix (вариации)
-
-📊 <b>Разрешение</b>
-• Генерация до 2K
 • Upscale до 4K
 
 ━━━━━━━━━━━━━━━━━━━━
 
-💡 <b>Подходит для:</b> дизайнеров, маркетологов, художников, SMM-специалистов, креаторов
+💡 <b>Подходит для:</b> дизайнеров, маркетологов, художников, SMM-специалистов
 """,
         "prices": """💰 <b>Тарифы:</b>
 
 • Basic (200 img) — $10/мес
-• Standard (200 img + unlimited relax) — $30/мес
-• Pro (400 img + turbo) — $80/мес
-• Mega (800 img + turbo) — $120/мес""",
-        "features": ["200-800 img/мес", "Все стили", "Upscale 4K", "Turbo Mode", "Relax Mode"]
+• Standard — $30/мес
+• Pro — $80/мес
+• Mega — $120/мес""",
     },
     "klingai": {
         "name": "🎬 KlingAI",
@@ -388,25 +381,14 @@ PRODUCTS = {
 • Видео до 3 минут
 • Разрешение до 1080p
 • Плавная анимация
-• Реалистичные движения
 
 🖼️ <b>Изображение в видео</b>
 • Animate your image
-• Продолжение существующего видео
-• Стилизация и эффекты
-
-⚡ <b>Продвинутые функции</b>
-• Контроль движения
-• Анимация по референсу
-• Промт-ассистент
-
-📱 <b>Доступ</b>
-• Веб-интерфейс
-• API доступ (включён)
+• Продолжение видео
 
 ━━━━━━━━━━━━━━━━━━━━
 
-💡 <b>Подходит для:</b> видеографов, маркетологов, контент-креаторов, рекламщиков
+💡 <b>Подходит для:</b> видеографов, маркетологов, контент-креаторов
 """,
         "prices": """💰 <b>Тарифы:</b>
 
@@ -414,8 +396,7 @@ PRODUCTS = {
 • Professional — $49/мес
 • Enterprise — $99/мес
 
-<i>Точные цены уточняйте у менеджера</i>""",
-        "features": ["3 мин видео", "1080p", "Motion Control", "Reference Animation", "API Access"]
+<i>Цены уточняйте у менеджера</i>""",
     },
     "sora2": {
         "name": "🎥 Sora 2",
@@ -430,27 +411,14 @@ PRODUCTS = {
 • Реалистичные видео до 60 секунд
 • Самое высокое качество на рынке
 • Продвинутая физика
-• Плавные переходы
 
 🖼️ <b>Мультимодальность</b>
 • Текст в видео
 • Изображение в видео
-• Продолжение видео
-• Цикличные видео
-
-⚡ <b>Возможности</b>
-• Генерация с нуля
-• Storyboard режим
-• Remix существующих видео
-• Интерполяция FPS
-
-💎 <b>Приоритет</b>
-• Быстрая генерация
-• Ранний доступ к функциям
 
 ━━━━━━━━━━━━━━━━━━━━
 
-💡 <b>Подходит для:</b> кинематографистов, рекламщиков, режиссёров, креаторов контента
+💡 <b>Подходит для:</b> кинематографистов, рекламщиков, режиссёров
 """,
         "prices": """💰 <b>Тарифы:</b>
 
@@ -459,7 +427,6 @@ PRODUCTS = {
 • Pro (1000 credits) — $500/мес
 
 <i>1 credit ≈ 1 секунда видео</i>""",
-        "features": ["60 сек видео", "4K Quality", "Text/Image to Video", "Storyboard", "Priority"]
     },
 }
 
@@ -526,12 +493,27 @@ def get_info_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(keyboard)
 
 
+def get_admin_keyboard() -> InlineKeyboardMarkup:
+    """Кнопки админ-панели"""
+    keyboard = [
+        [InlineKeyboardButton("📊 Статистика", callback_data="admin_stats")],
+        [InlineKeyboardButton("📢 Сделать рассылку", callback_data="broadcast_start")],
+        [InlineKeyboardButton("👥 Список пользователей", callback_data="admin_users")],
+        [InlineKeyboardButton("◀️ Выйти", callback_data="back_to_menu")],
+    ]
+    return InlineKeyboardMarkup(keyboard)
+
+
 # ============================================
 # КОМАНДЫ
 # ============================================
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Обработчик команды /start — приветственное сообщение"""
+    # Сохраняем пользователя в БД
+    user = update.effective_user
+    add_user(user.id, user.username or "", user.first_name, user.last_name)
+    
     welcome_text = f"""
 🏪 <b>Добро пожаловать в VanessPay!</b>
 
@@ -584,6 +566,38 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
+async def admin_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Админ-панель — доступ только для MANAGER_ID"""
+    user_id = update.effective_user.id
+    manager_id = int(MANAGER_ID) if MANAGER_ID and MANAGER_ID.isdigit() else 0
+    
+    # Проверка доступа
+    if user_id != manager_id and str(user_id) != MANAGER_ID:
+        await update.message.reply_text(
+            "⛔ У вас нет доступа к админ-панели.",
+            parse_mode="HTML"
+        )
+        return
+    
+    admin_text = f"""
+🔐 <b>Админ-панель VanessPay</b>
+
+━━━━━━━━━━━━━━━━━━━━
+
+👥 <b>Пользователей в базе:</b> {get_users_count()}
+
+━━━━━━━━━━━━━━━━━━━━
+
+<b>Выберите действие:</b>
+"""
+    
+    await update.message.reply_text(
+        admin_text,
+        parse_mode="HTML",
+        reply_markup=get_admin_keyboard()
+    )
+
+
 # ============================================
 # ОБРАБОТЧИКИ CALLBACK
 # ============================================
@@ -594,7 +608,12 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
 
     data = query.data
+    user_id = query.from_user.id
     manager_link = f"https://t.me/{MANAGER_USERNAME}"
+    
+    # Проверка доступа к админке
+    admin_id = int(MANAGER_ID) if MANAGER_ID and MANAGER_ID.isdigit() else 0
+    is_admin = user_id == admin_id or str(user_id) == MANAGER_ID
 
     # Игнорируем разделители
     if data == "divider":
@@ -631,6 +650,155 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
         )
         return
 
+    # --- Админ-панель ---
+    if data == "admin_panel":
+        if not is_admin:
+            await query.answer("⛔ Нет доступа", show_alert=True)
+            return
+        
+        admin_text = f"""
+🔐 <b>Админ-панель VanessPay</b>
+
+━━━━━━━━━━━━━━━━━━━━
+
+👥 <b>Пользователей в базе:</b> {get_users_count()}
+
+━━━━━━━━━━━━━━━━━━━━
+
+<b>Выберите действие:</b>
+"""
+        await query.edit_message_text(
+            admin_text,
+            parse_mode="HTML",
+            reply_markup=get_admin_keyboard()
+        )
+        return
+
+    # --- Статистика ---
+    if data == "admin_stats":
+        if not is_admin:
+            await query.answer("⛔ Нет доступа", show_alert=True)
+            return
+        
+        users_count = get_users_count()
+        stats_text = f"""
+📊 <b>Статистика бота</b>
+
+━━━━━━━━━━━━━━━━━━━━
+
+👥 <b>Всего пользователей:</b> {users_count}
+
+━━━━━━━━━━━━━━━━━━━━
+
+💡 Подробная статистика будет доступна в будущих обновлениях.
+"""
+        keyboard = [
+            [InlineKeyboardButton("◀️ В админку", callback_data="admin_panel")],
+            [InlineKeyboardButton("🏠 Главное меню", callback_data="back_to_menu")],
+        ]
+        await query.edit_message_text(
+            stats_text,
+            parse_mode="HTML",
+            reply_markup=InlineKeyboardMarkup(keyboard)
+        )
+        return
+
+    # --- Список пользователей ---
+    if data == "admin_users":
+        if not is_admin:
+            await query.answer("⛔ Нет доступа", show_alert=True)
+            return
+        
+        users = get_all_users()
+        users_text = f"""
+👥 <b>Список пользователей</b>
+
+━━━━━━━━━━━━━━━━━━━━
+
+Всего: {len(users)} пользователей
+
+"""
+        if len(users) <= 50:
+            for i, (uid, uname, fname) in enumerate(users[:50], 1):
+                name = uname if uname else fname if fname else f"User{uid}"
+                users_text += f"{i}. @{name} (ID: {uid})\n"
+        else:
+            for i, (uid, uname, fname) in enumerate(users[:10], 1):
+                name = uname if uname else fname if fname else f"User{uid}"
+                users_text += f"{i}. @{name} (ID: {uid})\n"
+            users_text += f"\n...и ещё {len(users) - 10} пользователей"
+        
+        users_text += "\n━━━━━━━━━━━━━━━━━━━━"
+        
+        keyboard = [
+            [InlineKeyboardButton("◀️ В админку", callback_data="admin_panel")],
+            [InlineKeyboardButton("🏠 Главное меню", callback_data="back_to_menu")],
+        ]
+        await query.edit_message_text(
+            users_text,
+            parse_mode="HTML",
+            reply_markup=InlineKeyboardMarkup(keyboard)
+        )
+        return
+
+    # --- Начать рассылку ---
+    if data == "broadcast_start":
+        if not is_admin:
+            await query.answer("⛔ Нет доступа", show_alert=True)
+            return
+        
+        # Сохраняем состояние
+        context.user_data['broadcasting'] = True
+        
+        broadcast_text = """
+📢 <b>Режим рассылки</b>
+
+━━━━━━━━━━━━━━━━━━━━
+
+⚠️ <b>Внимание!</b> Отправьте сообщение для рассылки.
+
+<b>Формат:</b>
+Просто напишите текст сообщения.
+
+<b>Получатели:</b> все пользователи бота
+
+━━━━━━━━━━━━━━━━━━━━
+
+👥 Количество получателей будет показано перед отправкой.
+
+<i>Отмена: /cancel</i>
+"""
+        keyboard = [
+            [InlineKeyboardButton("❌ Отмена", callback_data="broadcast_cancel")],
+        ]
+        await query.edit_message_text(
+            broadcast_text,
+            parse_mode="HTML",
+            reply_markup=InlineKeyboardMarkup(keyboard)
+        )
+        return
+
+    # --- Отмена рассылки ---
+    if data == "broadcast_cancel":
+        context.user_data['broadcasting'] = False
+        await query.answer("Рассылка отменена")
+        
+        admin_text = f"""
+🔐 <b>Админ-панель</b>
+
+━━━━━━━━━━━━━━━━━━━━
+
+👥 <b>Пользователей:</b> {get_users_count()}
+
+<i>Рассылка отменена.</i>
+"""
+        await query.edit_message_text(
+            admin_text,
+            parse_mode="HTML",
+            reply_markup=get_admin_keyboard()
+        )
+        return
+
     # --- Каталог ---
     if data == "catalog":
         catalog_text = """
@@ -640,7 +808,6 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
 
 ━━━━━━━━━━━━━━━━━━━━
 """
-        # Добавляем краткий список
         for product in PRODUCTS.values():
             name = product['name']
             short = product['short_desc']
@@ -691,24 +858,6 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
         )
         return
 
-    # --- Статистика ---
-    if data == "statistics":
-        await query.edit_message_text(
-            STATISTICS,
-            parse_mode="HTML",
-            reply_markup=get_info_keyboard()
-        )
-        return
-
-    # --- Как это работает ---
-    if data == "how_it_works":
-        await query.edit_message_text(
-            HOW_IT_WORKS,
-            parse_mode="HTML",
-            reply_markup=get_info_keyboard()
-        )
-        return
-
     # --- Продукты ---
     if data.startswith("product_"):
         product_id = data.replace("product_", "")
@@ -742,12 +891,6 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
 👉 <a href="{manager_link}">@{MANAGER_USERNAME}</a>
 
 ⏰ Среднее время ответа: <b>5-15 минут</b>
-
-💡 <b>Мы поможем:</b>
-• Подобрать оптимальный тариф
-• Ответить на вопросы
-• Провести оплату
-• Помочь с активацией
 """
         keyboard = [
             [InlineKeyboardButton("💬 Написать менеджеру", url=manager_link)],
@@ -776,13 +919,7 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
 • Советы по использованию
 • Ранний доступ к новым продуктам
 
-💡 Канал обновляется ежедневно!
-
-━━━━━━━━━━━━━━━━━━━━
-
 👉 <a href="{CHANNEL_LINK}">Перейти в канал</a>
-
-💡 После подписки возвращайтесь сюда для покупки!
 """
         keyboard = [
             [InlineKeyboardButton("📢 Подписаться на канал", url=CHANNEL_LINK)],
@@ -819,14 +956,11 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
 • Выбора способа оплаты
 • Получения ключа после оплаты
 
-💳 <b>Доступные способы оплаты:</b>
+💳 <b>Способы оплаты:</b>
 • Банковская карта (РФ/СНГ)
 • СБП (Россия)
 • ЮMoney / ЮKassa
 • Криптовалюта (BTC, ETH, USDT)
-• Другие способы — уточните у менеджера
-
-⏱️ <b>Активация:</b> в течение 15 минут после оплаты
 
 👉 <a href="{manager_link}">@{MANAGER_USERNAME}</a>
 """
@@ -844,16 +978,149 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
         return
 
 
+async def broadcast_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Обработчик сообщений для рассылки"""
+    user_id = update.effective_user.id
+    admin_id = int(MANAGER_ID) if MANAGER_ID and MANAGER_ID.isdigit() else 0
+    is_admin = user_id == admin_id or str(user_id) == MANAGER_ID
+    
+    # Проверяем, активен ли режим рассылки
+    if not context.user_data.get('broadcasting'):
+        return
+    
+    if not is_admin:
+        await update.message.reply_text("⛔ Только администратор может делать рассылку.")
+        context.user_data['broadcasting'] = False
+        return
+    
+    message_text = update.message.text
+    users = get_all_users()
+    total = len(users)
+    
+    # Подтверждение перед отправкой
+    confirm_text = f"""
+📢 <b>Подтверждение рассылки</b>
+
+━━━━━━━━━━━━━━━━━━━━
+
+📝 <b>Сообщение:</b>
+{message_text[:500]}{'...' if len(message_text) > 500 else ''}
+
+━━━━━━━━━━━━━━━━━━━━
+
+👥 <b>Получателей:</b> {total}
+
+⚠️ Отправить рассылку?
+"""
+    
+    keyboard = [
+        [InlineKeyboardButton("✅ Отправить", callback_data=f"broadcast_confirm_{total}")],
+        [InlineKeyboardButton("❌ Отмена", callback_data="broadcast_cancel")],
+    ]
+    
+    # Сохраняем сообщение для рассылки
+    context.user_data['broadcast_message'] = message_text
+    context.user_data['broadcasting'] = False
+    
+    await update.message.reply_text(
+        confirm_text,
+        parse_mode="HTML",
+        reply_markup=InlineKeyboardMarkup(keyboard)
+    )
+
+
+async def broadcast_confirm_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Подтверждение и отправка рассылки"""
+    query = update.callback_query
+    await query.answer("Отправляем рассылку...", show_alert=True)
+    
+    data = query.data
+    if not data.startswith("broadcast_confirm_"):
+        return
+    
+    message_text = context.user_data.get('broadcast_message', "")
+    if not message_text:
+        await query.edit_message_text("❌ Сообщение не найдено. Начните рассылку заново.")
+        return
+    
+    # Получаем пользователей
+    users = get_all_users()
+    
+    # Клавиатура для сообщения
+    keyboard = [
+        [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_menu")],
+    ]
+    message_reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    # Отправляем
+    success = 0
+    failed = 0
+    
+    status_msg = await query.message.reply_text(
+        f"📤 Отправка рассылки...\n\n👥 Прогресс: 0/{len(users)}",
+        parse_mode="HTML"
+    )
+    
+    for i, (user_id, _, _) in enumerate(users, 1):
+        try:
+            await context.bot.send_message(
+                chat_id=user_id,
+                text=message_text,
+                parse_mode="HTML",
+                reply_markup=message_reply_markup
+            )
+            success += 1
+        except Exception:
+            failed += 1
+        
+        # Обновляем прогресс каждые 10 пользователей
+        if i % 10 == 0:
+            await status_msg.edit_text(
+                f"📤 Отправка рассылки...\n\n👥 Прогресс: {i}/{len(users)}\n✅ Отправлено: {success}\n❌ Ошибок: {failed}",
+                parse_mode="HTML"
+            )
+    
+    # Финальный результат
+    result_text = f"""
+✅ <b>Рассылка завершена!</b>
+
+━━━━━━━━━━━━━━━━━━━━
+
+👥 <b>Всего получателей:</b> {len(users)}
+
+✅ <b>Успешно:</b> {success}
+
+❌ <b>Не доставлено:</b> {failed}
+
+━━━━━━━━━━━━━━━━━━━━
+"""
+    
+    await status_msg.edit_text(result_text, parse_mode="HTML")
+
+
+async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Отмена рассылки"""
+    context.user_data['broadcasting'] = False
+    context.user_data['broadcast_message'] = None
+    await update.message.reply_text("✅ Рассылка отменена.")
+
+
 async def unknown_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Обработчик неизвестных сообщений"""
+    # Сохраняем активность пользователя
+    user = update.effective_user
+    if user:
+        update_user_activity(user.id)
+    
     unknown_text = """
 🤔 Извините, я не понимаю это сообщение.
 
 Используйте команды:
 • /start — Главное меню
 • /help — Помощь
+• /admin — Админ-панель (только для менеджера)
 
-или выберите действие в меню ниже 👇
+или выберите действие в меню 👇
 """
     await update.message.reply_text(
         unknown_text,
@@ -885,16 +1152,23 @@ def main():
     # Регистрация обработчиков команд
     app.add_handler(CommandHandler("start", start_command))
     app.add_handler(CommandHandler("help", help_command))
-
-    # Обработчик callback-кнопок
+    app.add_handler(CommandHandler("admin", admin_command))
+    app.add_handler(CommandHandler("cancel", cancel_command))
+    
+    # Обработчик callback-кнопок (нужен для рассылки)
+    app.add_handler(CallbackQueryHandler(broadcast_confirm_handler, pattern="^broadcast_confirm_"))
     app.add_handler(CallbackQueryHandler(button_handler))
 
+    # Обработчик сообщений для рассылки
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, broadcast_handler))
+    
     # Обработчик неизвестных сообщений
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, unknown_message))
 
     logger.info("✅ Бот готов к работе!")
     print("\n" + "="*50)
     print("🤖 VanessPay Bot успешно запущен!")
+    print("📊 База данных: users.db")
     print("="*50 + "\n")
 
     # Запуск бота
