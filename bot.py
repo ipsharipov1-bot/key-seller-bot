@@ -1172,24 +1172,11 @@ def main():
     print("="*50 + "\n")
 
     # Запуск бота
-    # Проверяем, есть ли переменные для Railway (webhook)
-    railway_public_domain = os.getenv("RAILWAY_PUBLIC_DOMAIN")
-    railway_port = os.getenv("PORT", "8080")
-    
-    if railway_public_domain:
-        # Railway с webhook
-        webhook_url = f"https://{railway_public_domain}/{BOT_TOKEN}"
-        logger.info(f"🔗 Используем webhook: {webhook_url}")
-        
-        app.run_webhook(
-            listen="0.0.0.0",
-            port=int(railway_port),
-            url_path=BOT_TOKEN,
-            webhook_url=webhook_url
-        )
-    else:
-        # Локальный запуск с polling
-        app.run_polling(allowed_updates=Update.ALL_TYPES)
+    app.run_polling(
+        allowed_updates=Update.ALL_TYPES,
+        timeout=60,  # Долгий polling для Railway
+        bootstrap_retries=-1,  # Бесконечные попытки переподключения
+    )
 
 
 if __name__ == "__main__":
