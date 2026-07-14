@@ -6,7 +6,7 @@ VanessPay — Официальные ключи от нейросетей
 import logging
 import sqlite3
 from datetime import datetime
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo, InputFile
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -37,6 +37,18 @@ PAYMENT_LINK = os.getenv("PAYMENT_LINK", "https://t.me/vanesspayer")
 
 # URL Mini App
 MINI_APP_URL = "https://ipsharipov1-bot.github.io/key-seller-bot/"
+
+# URL изображений (Unsplash CDN)
+IMAGES = {
+    "welcome": "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80",
+    "chatgpt": "https://images.unsplash.com/photo-1677776094982-6a5a6d7e9e63?w=600&q=80",
+    "gemini": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=600&q=80",
+    "claude": "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&q=80",
+    "midjourney": "https://images.unsplash.com/photo-1684391729462-63ef8c3f7f5a?w=600&q=80",
+    "klingai": "https://images.unsplash.com/photo-1535016120720-40c646be5580?w=600&q=80",
+    "sora": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=600&q=80",
+    "catalog": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&q=80",
+}
 
 # ============================================
 # БАЗА ДАННЫХ
@@ -537,8 +549,10 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
 🎯 <b>Выберите действие:</b>
 """
 
-    await update.message.reply_text(
-        welcome_text,
+    # Отправляем изображение с текстом
+    await update.message.reply_photo(
+        photo=IMAGES["welcome"],
+        caption=welcome_text,
         parse_mode="HTML",
         reply_markup=get_main_menu_keyboard()
     )
@@ -857,8 +871,9 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
         
         catalog_text += "━━━━━━━━━━━━━━━━━━━━"
         
-        await query.edit_message_text(
-            catalog_text,
+        await query.message.reply_photo(
+            photo=IMAGES["catalog"],
+            caption=catalog_text,
             parse_mode="HTML",
             reply_markup=get_catalog_keyboard()
         )
@@ -916,8 +931,11 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
 
 ━━━━━━━━━━━━━━━━━━━━
 """
-            await query.edit_message_text(
-                product_text,
+            product_image = IMAGES.get(product_id, IMAGES["welcome"])
+            
+            await query.message.reply_photo(
+                photo=product_image,
+                caption=product_text,
                 parse_mode="HTML",
                 reply_markup=get_product_keyboard(product_id)
             )
