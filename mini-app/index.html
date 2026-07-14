@@ -38,7 +38,7 @@
 
       /* Header */
       .header {
-        background: linear-gradient(180deg, #1a1a2e 0%, var(--card-bg) 100%);
+        background: var(--card-bg);
         padding: 20px;
         text-align: center;
         border-bottom: 1px solid var(--border);
@@ -60,15 +60,6 @@
         color: var(--text-secondary);
         font-size: 12px;
         margin-top: 4px;
-      }
-
-      /* Hero Image */
-      .hero-image {
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
-        border-radius: 0;
-        display: block;
       }
 
       /* Tabs */
@@ -140,15 +131,6 @@
         padding: 20px;
         margin-bottom: 16px;
         border: 1px solid var(--border);
-        overflow: hidden;
-      }
-
-      .card-image {
-        width: calc(100% + 40px);
-        margin: -20px -20px 16px -20px;
-        height: 160px;
-        object-fit: cover;
-        border-radius: 16px 16px 0 0;
       }
 
       .card-title {
@@ -238,21 +220,6 @@
         margin-top: 4px;
       }
 
-      /* Image Grid */
-      .image-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        margin: 16px 0;
-      }
-
-      .image-grid-item {
-        width: 100%;
-        height: 120px;
-        object-fit: cover;
-        border-radius: 12px;
-      }
-
       /* Reviews */
       .review-card {
         background: var(--card-bg);
@@ -264,16 +231,9 @@
 
       .review-header {
         display: flex;
+        justify-content: space-between;
         align-items: center;
         margin-bottom: 8px;
-      }
-
-      .review-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-right: 12px;
       }
 
       .review-author {
@@ -284,7 +244,6 @@
       .review-stars {
         color: #fbbf24;
         font-size: 12px;
-        margin-left: auto;
       }
 
       .review-text {
@@ -373,28 +332,50 @@
         margin-bottom: 2px;
       }
 
-      /* Guarantee Image */
-      .guarantee-image {
+      /* CTA Button */
+      .cta-button {
+        display: block;
         width: 100%;
-        height: 200px;
-        object-fit: cover;
+        padding: 16px;
+        background: var(--gradient);
+        color: white;
+        border: none;
         border-radius: 12px;
-        margin: 16px 0;
-      }
-
-      /* FAQ Image */
-      .faq-image {
-        width: calc(100% + 40px);
-        margin: -20px -20px 16px -20px;
-        height: 140px;
-        object-fit: cover;
-        border-radius: 16px 16px 0 0;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        margin-top: 20px;
       }
 
       /* Mobile adjustments */
       @media (max-width: 380px) {
         .stats-grid {
           grid-template-columns: 1fr;
+        }
+      }
+
+      /* Loading animation */
+      .skeleton {
+        background: linear-gradient(
+          90deg,
+          var(--card-bg) 25%,
+          var(--border) 50%,
+          var(--card-bg) 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        border-radius: 8px;
+        height: 100px;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
         }
       }
     </style>
@@ -405,13 +386,6 @@
       <div class="header-logo">VanessPay</div>
       <div class="header-subtitle">Ваш надёжный поставщик AI-решений</div>
     </header>
-
-    <!-- Hero Image -->
-    <img
-      src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80"
-      alt="AI Neural Network"
-      class="hero-image"
-    />
 
     <!-- Tabs -->
     <nav class="tabs">
@@ -426,11 +400,6 @@
       <!-- О нас -->
       <div class="tab-content active" id="about">
         <div class="card">
-          <img
-            src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=600&q=80"
-            alt="AI Technology"
-            class="card-image"
-          />
           <div class="card-title">🏪 О VanessPay</div>
           <div class="card-text">
             Мы специализируемся на продаже официальных подписок и ключей от
@@ -488,51 +457,13 @@
             </div>
           </div>
         </div>
-
-        <!-- AI Products Grid -->
-        <div class="image-grid">
-          <img
-            src="https://images.unsplash.com/photo-1677776094982-6a5a6d7e9e63?w=400&q=80"
-            alt="ChatGPT"
-            class="image-grid-item"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1684391729462-63ef8c3f7f5a?w=400&q=80"
-            alt="AI Art"
-            class="image-grid-item"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=400&q=80"
-            alt="Neural Network"
-            class="image-grid-item"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&q=80"
-            alt="Technology"
-            class="image-grid-item"
-          />
-        </div>
       </div>
 
       <!-- Отзывы -->
       <div class="tab-content" id="reviews">
-        <div class="card">
-          <img
-            src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=600&q=80"
-            alt="Happy Customers"
-            class="card-image"
-          />
-          <div class="card-title">⭐ Отзывы клиентов</div>
-        </div>
-
         <div class="review-card">
           <div class="review-header">
-            <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80"
-              alt="Avatar"
-              class="review-avatar"
-            />
-            <span class="review-author">Алексей М., Москва</span>
+            <span class="review-author">💬 Алексей М., Москва</span>
             <span class="review-stars">⭐⭐⭐⭐⭐</span>
           </div>
           <div class="review-text">
@@ -543,12 +474,7 @@
 
         <div class="review-card">
           <div class="review-header">
-            <img
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80"
-              alt="Avatar"
-              class="review-avatar"
-            />
-            <span class="review-author">Екатерина К., Киев</span>
+            <span class="review-author">💬 Екатерина К., Киев</span>
             <span class="review-stars">⭐⭐⭐⭐⭐</span>
           </div>
           <div class="review-text">
@@ -559,12 +485,7 @@
 
         <div class="review-card">
           <div class="review-header">
-            <img
-              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80"
-              alt="Avatar"
-              class="review-avatar"
-            />
-            <span class="review-author">Дмитрий В., Алматы</span>
+            <span class="review-author">💬 Дмитрий В., Алматы</span>
             <span class="review-stars">⭐⭐⭐⭐⭐</span>
           </div>
           <div class="review-text">
@@ -575,12 +496,7 @@
 
         <div class="review-card">
           <div class="review-header">
-            <img
-              src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80"
-              alt="Avatar"
-              class="review-avatar"
-            />
-            <span class="review-author">Анна С., Минск</span>
+            <span class="review-author">💬 Анна С., Минск</span>
             <span class="review-stars">⭐⭐⭐⭐⭐</span>
           </div>
           <div class="review-text">
@@ -591,12 +507,7 @@
 
         <div class="review-card">
           <div class="review-header">
-            <img
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80"
-              alt="Avatar"
-              class="review-avatar"
-            />
-            <span class="review-author">Максим Т., Ташкент</span>
+            <span class="review-author">💬 Максим Т., Ташкент</span>
             <span class="review-stars">⭐⭐⭐⭐⭐</span>
           </div>
           <div class="review-text">
@@ -608,15 +519,6 @@
 
       <!-- FAQ -->
       <div class="tab-content" id="faq">
-        <div class="card">
-          <img
-            src="https://images.unsplash.com/photo-1535378917042-10a22c95931a?w=600&q=80"
-            alt="Questions"
-            class="faq-image"
-          />
-          <div class="card-title">❓ Частые вопросы</div>
-        </div>
-
         <div class="faq-item">
           <div class="faq-question">Это официальные ключи?</div>
           <div class="faq-answer">
@@ -673,11 +575,6 @@
       <div class="tab-content" id="guarantees">
         <div class="card">
           <div class="card-title">🛡️ Наши гарантии</div>
-          <img
-            src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&q=80"
-            alt="Security Shield"
-            class="guarantee-image"
-          />
 
           <div class="guarantee-item">
             <div class="guarantee-check">✓</div>
@@ -723,7 +620,7 @@
             <div class="guarantee-check">✓</div>
             <div class="guarantee-text">
               <strong>Прозрачное ценообразование</strong>
-              Цены без скрытых платежей. Что видите — то платите.
+              Цены без скрытых плалатежей. Что видите — то платите.
             </div>
           </div>
         </div>
@@ -744,9 +641,11 @@
         tab.addEventListener("click", () => {
           const targetId = tab.dataset.tab;
 
+          // Update active tab
           tabs.forEach((t) => t.classList.remove("active"));
           tab.classList.add("active");
 
+          // Update content
           contents.forEach((c) => c.classList.remove("active"));
           document.getElementById(targetId).classList.add("active");
         });
@@ -760,6 +659,7 @@
         });
       });
 
+      // Mark as fully loaded
       tg.ready();
     </script>
   </body>
