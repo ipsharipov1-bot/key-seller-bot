@@ -445,7 +445,6 @@ def get_main_menu_keyboard() -> InlineKeyboardMarkup:
         [InlineKeyboardButton("💬 Связаться с менеджером", url=f"https://t.me/{MANAGER_USERNAME}")],
         [InlineKeyboardButton("📢 Подписаться на канал", url=CHANNEL_LINK)],
         [InlineKeyboardButton("📱 О нас | Отзывы | FAQ | Гарантии", web_app=WebAppInfo(url=MINI_APP_URL))],
-        [InlineKeyboardButton("🔷 Открыть Mini App", web_app=WebAppInfo(url=MINI_APP_URL))],
     ]
     return InlineKeyboardMarkup(keyboard)
 
