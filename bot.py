@@ -1156,9 +1156,30 @@ def main():
 
     # Запуск бота
     app.run_polling(
-        allowed_updates=Update.ALL_TYPES,
-        timeout=60,  # Долгий polling для Railway
-        bootstrap_retries=-1,  # Бесконечные попытки переподключения
+    # Запуск бота на Railway с webhook
+    import asyncio
+    from telegram.ext import Application
+    
+    webhook_url = os.getenv("RAILWAY_PUBLIC_DOMAIN")
+    if not webhook_url:
+        logger.error("❌ RAILWAY_PUBLIC_DOMAIN не установлен!")
+        return
+    
+    # Добавляем https если нужно
+    if not webhook_url.startswith("http"):
+        webhook_url = f"https://{webhook_url}"
+    
+    # Полный URL webhook'а
+    full_webhook_url = f"{webhook_url}/webhook"
+    
+    logger.info(f"🔗 Webhook URL: {full_webhook_url}")
+    
+    # Запуск с webhook
+    app.run_webhook(
+        listen="0.0.0.0",
+        port=int(os.getenv("PORT", 8000)),
+        url_path="/webhook",
+        webhook_url=full_webhook_url,
     )
 
 
