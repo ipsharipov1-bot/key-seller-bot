@@ -33,7 +33,10 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 MANAGER_USERNAME = os.getenv("MANAGER_USERNAME", "manager")
 MANAGER_ID = os.getenv("MANAGER_ID", "")  # Telegram ID менеджера для доступа к админке
 CHANNEL_LINK = os.getenv("CHANNEL_LINK", "https://t.me/vanesspayofficial")
-PAYMENT_LINK = os.getenv("PAYMENT_LINK", "https://t.me/vanesspayer")
+PAYMENT_LINK = os.getenv("PAYMENT_LINK", "https://online.sberbank.ru/")
+
+# Путь к логотипу
+LOGO_PATH = "assets/logo.png"
 
 # URL Mini App
 MINI_APP_URL = "https://ipsharipov1-bot.github.io/key-seller-bot/"
@@ -257,8 +260,6 @@ PRODUCTS = {
         "short_desc": "GPT-4o, DALL-E 3, анализ файлов",
         "description": """<b>ChatGPT Plus</b> — Премиум доступ к самым мощным моделям OpenAI
 
-━━━━━━━━━━━━━━━━━━━━
-
 <b>Что входит в подписку:</b>
 
 🧠 <b>GPT-4o</b> — Новейшая мультимодальная модель
@@ -276,12 +277,9 @@ PRODUCTS = {
 • Быстрые ответы даже в пиковые часы
 • Ранний доступ к новым функциям
 
-━━━━━━━━━━━━━━━━━━━━
-
 💡 <b>Подходит для:</b> разработчиков, копирайтеров, аналитиков, студентов, бизнеса
 """,
         "prices": """💰 <b>Тарифы:</b>
-
 • 1 месяц — $20
 • 3 месяца — $55 <i>(-8%)</i>
 • 6 месяцев — $100 <i>(-17%)</i>
@@ -291,8 +289,6 @@ PRODUCTS = {
         "name": "✨ Gemini Ultra + Veo",
         "short_desc": "Google AI, 1M токенов, генерация видео",
         "description": """<b>Gemini Ultra + Veo 2</b> — Флагманские модели от Google
-
-━━━━━━━━━━━━━━━━━━━━
 
 <b>Что входит в подписку:</b>
 
@@ -305,12 +301,9 @@ PRODUCTS = {
 • Реалистичные видео до 60 секунд
 • Высокое разрешение
 
-━━━━━━━━━━━━━━━━━━━━
-
 💡 <b>Подходит для:</b> исследователей, аналитиков данных, видеокреаторов
 """,
         "prices": """💰 <b>Тарифы:</b>
-
 • 1 месяц — $25
 • 3 месяца — $70 <i>(-7%)</i>
 • 6 месяцев — $130 <i>(-13%)</i>
@@ -320,8 +313,6 @@ PRODUCTS = {
         "name": "🎭 Claude Pro",
         "short_desc": "200K токенов, идеален для кода",
         "description": """<b>Claude Pro</b> — Самый умный AI-ассистент от Anthropic
-
-━━━━━━━━━━━━━━━━━━━━
 
 <b>Что входит в подписку:</b>
 
@@ -334,12 +325,9 @@ PRODUCTS = {
 • Создание веб-приложений
 • Генерация и запуск кода
 
-━━━━━━━━━━━━━━━━━━━━
-
 💡 <b>Подходит для:</b> программистов, писателей, консультантов
 """,
         "prices": """💰 <b>Тарифы:</b>
-
 • 1 месяц — $20
 • 3 месяца — $55 <i>(-8%)</i>
 • 6 месяцев — $100 <i>(-17%)</i>
@@ -350,8 +338,6 @@ PRODUCTS = {
         "short_desc": "Шедевры изображений, все стили",
         "description": """<b>Midjourney</b> — №1 для генерации изображений
 
-━━━━━━━━━━━━━━━━━━━━
-
 <b>Что входит в подписку:</b>
 
 🎨 <b>Качество Standard</b>
@@ -360,12 +346,9 @@ PRODUCTS = {
 • Все художественные стили
 • Upscale до 4K
 
-━━━━━━━━━━━━━━━━━━━━
-
 💡 <b>Подходит для:</b> дизайнеров, маркетологов, художников, SMM-специалистов
 """,
         "prices": """💰 <b>Тарифы:</b>
-
 • Basic (200 img) — $10/мес
 • Standard — $30/мес
 • Pro — $80/мес
@@ -375,8 +358,6 @@ PRODUCTS = {
         "name": "🎬 KlingAI",
         "short_desc": "Профессиональная генерация видео",
         "description": """<b>KlingAI</b> — Профессиональная видеогенерация от Kuaishou
-
-━━━━━━━━━━━━━━━━━━━━
 
 <b>Что входит в подписку:</b>
 
@@ -389,12 +370,9 @@ PRODUCTS = {
 • Animate your image
 • Продолжение видео
 
-━━━━━━━━━━━━━━━━━━━━
-
 💡 <b>Подходит для:</b> видеографов, маркетологов, контент-креаторов
 """,
         "prices": """💰 <b>Тарифы:</b>
-
 • Starter — $15/мес
 • Professional — $49/мес
 • Enterprise — $99/мес
@@ -405,8 +383,6 @@ PRODUCTS = {
         "name": "🎥 Sora 2",
         "short_desc": "OpenAI видеогенератор, топ качество",
         "description": """<b>Sora 2</b> — Революционный видеогенератор от OpenAI
-
-━━━━━━━━━━━━━━━━━━━━
 
 <b>Что входит в подписку:</b>
 
@@ -419,12 +395,9 @@ PRODUCTS = {
 • Текст в видео
 • Изображение в видео
 
-━━━━━━━━━━━━━━━━━━━━
-
 💡 <b>Подходит для:</b> кинематографистов, рекламщиков, режиссёров
 """,
         "prices": """💰 <b>Тарифы:</b>
-
 • Starter (66 credits) — $50/мес
 • Plus (200 credits) — $200/мес
 • Pro (1000 credits) — $500/мес
@@ -444,7 +417,7 @@ def get_main_menu_keyboard() -> InlineKeyboardMarkup:
         [InlineKeyboardButton("📚 Каталог нейросетей", callback_data="catalog")],
         [InlineKeyboardButton("💬 Связаться с менеджером", url=f"https://t.me/{MANAGER_USERNAME}")],
         [InlineKeyboardButton("📢 Подписаться на канал", url=CHANNEL_LINK)],
-        [InlineKeyboardButton("📱 О нас | Отзывы | FAQ | Гарантии", web_app=WebAppInfo(url=MINI_APP_URL))],
+        [InlineKeyboardButton("📱 О нас | FAQ | Гарантии", web_app=WebAppInfo(url=MINI_APP_URL))],
     ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -467,10 +440,9 @@ def get_product_keyboard(product_id: str) -> InlineKeyboardMarkup:
     """Кнопки для конкретного продукта"""
     keyboard = [
         [InlineKeyboardButton("💬 Написать менеджеру", url=f"https://t.me/{MANAGER_USERNAME}")],
-        [InlineKeyboardButton("💳 Оплатить сейчас", callback_data=f"pay_{product_id}")],
-        [InlineKeyboardButton("📱 О нас | FAQ | Отзывы", web_app=WebAppInfo(url=MINI_APP_URL))],
+        [InlineKeyboardButton("💳 Оплатить сейчас", url=PAYMENT_LINK)],
+        [InlineKeyboardButton("📱 О нас | FAQ | Гарантии", web_app=WebAppInfo(url=MINI_APP_URL))],
         [InlineKeyboardButton("◀️ В каталог", callback_data="catalog")],
-        [InlineKeyboardButton("🏠 Главное меню", callback_data="back_to_menu")],
     ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -517,31 +489,36 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     welcome_text = f"""
 🏪 <b>Добро пожаловать в VanessPay!</b>
 
-Ваш надёжный поставщик официальных AI-решений.
-
-━━━━━━━━━━━━━━━━━━━━
+Мы предоставляем услуги по оплате подписок и ключей от ведущих AI-сервисов мира.
 
 <b>🤖 Продаём подписки от:</b>
 OpenAI • Google • Anthropic • Midjourney • Kuaishou
 
 <b>⭐ Наши преимущества:</b>
 ✅ Официальные ключи
-✅ Активация за 15 минут
+✅ Активация за 5 минут
 ✅ Поддержка 24/7
 ✅ Гарантия возврата
-
-━━━━━━━━━━━━━━━━━━━━
 
 📊 Уже помогли <b>2,000+</b> клиентам получить доступ к топовым AI!
 
 🎯 <b>Выберите действие:</b>
 """
 
-    await update.message.reply_text(
-        welcome_text,
-        parse_mode="HTML",
-        reply_markup=get_main_menu_keyboard()
-    )
+    try:
+        with open(LOGO_PATH, 'rb') as photo:
+            await update.message.reply_photo(
+                photo=photo,
+                caption=welcome_text,
+                parse_mode="HTML",
+                reply_markup=get_main_menu_keyboard()
+            )
+    except FileNotFoundError:
+        await update.message.reply_text(
+            welcome_text,
+            parse_mode="HTML",
+            reply_markup=get_main_menu_keyboard()
+        )
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -666,20 +643,16 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         welcome_text = f"""
 🏪 <b>Добро пожаловать в VanessPay!</b>
 
-Ваш надёжный поставщик официальных AI-решений.
-
-━━━━━━━━━━━━━━━━━━━━
+Мы предоставляем услуги по оплате подписок и ключей от ведущих AI-сервисов мира.
 
 <b>🤖 Продаём подписки от:</b>
 OpenAI • Google • Anthropic • Midjourney • Kuaishou
 
 <b>⭐ Наши преимущества:</b>
 ✅ Официальные ключи
-✅ Активация за 15 минут
+✅ Активация за 5 минут
 ✅ Поддержка 24/7
 ✅ Гарантия возврата
-
-━━━━━━━━━━━━━━━━━━━━
 
 📊 Уже помогли <b>2,000+</b> клиентам получить доступ к топовым AI!
 
@@ -701,11 +674,7 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
         admin_text = f"""
 🔐 <b>Админ-панель VanessPay</b>
 
-━━━━━━━━━━━━━━━━━━━━
-
 👥 <b>Пользователей в базе:</b> {get_users_count()}
-
-━━━━━━━━━━━━━━━━━━━━
 
 <b>Выберите действие:</b>
 """
@@ -726,11 +695,7 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
         stats_text = f"""
 📊 <b>Статистика бота</b>
 
-━━━━━━━━━━━━━━━━━━━━
-
 👥 <b>Всего пользователей:</b> {users_count}
-
-━━━━━━━━━━━━━━━━━━━━
 
 💡 Подробная статистика будет доступна в будущих обновлениях.
 """
@@ -755,8 +720,6 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
         users_text = f"""
 👥 <b>Список пользователей</b>
 
-━━━━━━━━━━━━━━━━━━━━
-
 Всего: {len(users)} пользователей
 
 """
@@ -769,8 +732,6 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
                 name = uname if uname else fname if fname else f"User{uid}"
                 users_text += f"{i}. @{name} (ID: {uid})\n"
             users_text += f"\n...и ещё {len(users) - 10} пользователей"
-        
-        users_text += "\n━━━━━━━━━━━━━━━━━━━━"
         
         keyboard = [
             [InlineKeyboardButton("◀️ В админку", callback_data="admin_panel")],
@@ -789,13 +750,10 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
             await query.answer("⛔ Нет доступа", show_alert=True)
             return
         
-        # Сохраняем состояние
         context.user_data['broadcasting'] = True
         
         broadcast_text = """
 📢 <b>Режим рассылки</b>
-
-━━━━━━━━━━━━━━━━━━━━
 
 ⚠️ <b>Внимание!</b> Отправьте сообщение для рассылки.
 
@@ -803,8 +761,6 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
 Просто напишите текст сообщения.
 
 <b>Получатели:</b> все пользователи бота
-
-━━━━━━━━━━━━━━━━━━━━
 
 👥 Количество получателей будет показано перед отправкой.
 
@@ -828,8 +784,6 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
         admin_text = f"""
 🔐 <b>Админ-панель</b>
 
-━━━━━━━━━━━━━━━━━━━━
-
 👥 <b>Пользователей:</b> {get_users_count()}
 
 <i>Рассылка отменена.</i>
@@ -848,14 +802,11 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
 
 Выберите продукт для просмотра подробной информации:
 
-━━━━━━━━━━━━━━━━━━━━
 """
         for product in PRODUCTS.values():
             name = product['name']
             short = product['short_desc']
             catalog_text += f"{name}\n📝 {short}\n\n"
-        
-        catalog_text += "━━━━━━━━━━━━━━━━━━━━"
         
         await query.edit_message_text(
             catalog_text,
@@ -906,15 +857,9 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
         if product_id in PRODUCTS:
             product = PRODUCTS[product_id]
             product_text = f"""
-{product['name']}
-
-━━━━━━━━━━━━━━━━━━━━
-
 {product['description']}
 
 {product['prices']}
-
-━━━━━━━━━━━━━━━━━━━━
 """
             await query.edit_message_text(
                 product_text,
@@ -983,13 +928,9 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
             payment_text = f"""
 💳 <b>Оформление заказа</b>
 
-━━━━━━━━━━━━━━━━━━━━
-
 📦 <b>{product['name']}</b>
 
 {product['prices']}
-
-━━━━━━━━━━━━━━━━━━━━
 
 ⚠️ <b>Для продолжения:</b>
 
