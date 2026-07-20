@@ -252,6 +252,56 @@
         line-height: 1.5;
       }
 
+      /* Product Cards */
+      .product-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 12px;
+        border: 1px solid var(--border);
+      }
+
+      .product-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .product-name {
+        font-size: 15px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .product-price {
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 700;
+        font-size: 15px;
+      }
+
+      .product-desc {
+        font-size: 12px;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+
+      .catalog-note {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 16px;
+        border: 1px solid var(--border);
+        text-align: center;
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+
       /* FAQ */
       .faq-item {
         background: var(--card-bg);
@@ -390,6 +440,7 @@
     <!-- Tabs -->
     <nav class="tabs">
       <div class="tab active" data-tab="about">ℹ️ О нас</div>
+      <div class="tab" data-tab="catalog">📚 Каталог</div>
       <div class="tab" data-tab="faq">❓ FAQ</div>
       <div class="tab" data-tab="guarantees">🛡️ Гарантии</div>
     </nav>
@@ -456,6 +507,102 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Каталог -->
+      <div class="tab-content" id="catalog">
+        <div class="catalog-note">
+          💡 Все подписки официальные с полной гарантией!
+        </div>
+
+        <!-- ChatGPT -->
+        <div class="product-card">
+          <div class="product-header">
+            <div class="product-name">🤖 ChatGPT Plus</div>
+            <div class="product-price">1 990₽</div>
+          </div>
+          <div class="product-desc">GPT-4o, DALL-E 3, анализ файлов, 128K токенов</div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-header">
+            <div class="product-name">🚀 ChatGPT Pro 5x</div>
+            <div class="product-price">9 800₽</div>
+          </div>
+          <div class="product-desc">5x ускорение, безлимит GPT-4o, приоритетный доступ</div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-header">
+            <div class="product-name">🔥 ChatGPT Pro 20x</div>
+            <div class="product-price">18 900₽</div>
+          </div>
+          <div class="product-desc">20x ускорение, Sora для видео, безлимит всех моделей</div>
+        </div>
+
+        <!-- Claude -->
+        <div class="product-card">
+          <div class="product-header">
+            <div class="product-name">🎭 Claude Pro</div>
+            <div class="product-price">1 990₽</div>
+          </div>
+          <div class="product-desc">200K токенов, идеален для кода и аналитики</div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-header">
+            <div class="product-name">💎 Claude Max 5x</div>
+            <div class="product-price">10 900₽</div>
+          </div>
+          <div class="product-desc">5x ускорение, расширенные лимиты сообщений</div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-header">
+            <div class="product-name">👑 Claude Max 20x</div>
+            <div class="product-price">20 450₽</div>
+          </div>
+          <div class="product-desc">20x ускорение, максимальная мощь для команд</div>
+        </div>
+
+        <!-- HeyGen -->
+        <div class="product-card">
+          <div class="product-header">
+            <div class="product-name">🎬 HeyGen Creator</div>
+            <div class="product-price">3 490₽</div>
+          </div>
+          <div class="product-desc">AI видео с аватарами, безлимит генерация</div>
+        </div>
+
+        <!-- CapCut -->
+        <div class="product-card">
+          <div class="product-header">
+            <div class="product-name">✂️ CapCut Pro 6 мес</div>
+            <div class="product-price">3 990₽</div>
+          </div>
+          <div class="product-desc">AI видеоредактор, без водяных знаков, 6 месяцев</div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-header">
+            <div class="product-name">✂️ CapCut Pro 1 мес</div>
+            <div class="product-price">990₽</div>
+          </div>
+          <div class="product-desc">AI видеоредактор, без водяных знаков</div>
+        </div>
+
+        <!-- Grok -->
+        <div class="product-card">
+          <div class="product-header">
+            <div class="product-name">🤖 Grok Super 2 мес</div>
+            <div class="product-price">1 990₽</div>
+          </div>
+          <div class="product-desc">xAI Илона Маска, Grok 2 + Grok 3, анализ изображений</div>
+        </div>
+
+        <a href="https://t.me/vanesspayer" class="cta-button">
+          💬 Написать менеджеру
+        </a>
       </div>
 
       <!-- FAQ -->
