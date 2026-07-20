@@ -584,20 +584,19 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
 
 🎯 Выберите действие:"""
 
+    # Отправляем фото БЕЗ кнопок (иначе callback не работают)
     try:
         with open(LOGO_PATH, 'rb') as photo:
-            await update.message.reply_photo(
-                photo=photo,
-                caption=welcome_text,
-                parse_mode="HTML",
-                reply_markup=get_main_menu_keyboard()
-            )
+            await update.message.reply_photo(photo=photo)
     except FileNotFoundError:
-        await update.message.reply_text(
-            welcome_text,
-            parse_mode="HTML",
-            reply_markup=get_main_menu_keyboard()
-        )
+        pass  # Фото необязательно
+    
+    # Текст с кнопками — отдельным сообщением
+    await update.message.reply_text(
+        welcome_text,
+        parse_mode="HTML",
+        reply_markup=get_main_menu_keyboard()
+    )
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
