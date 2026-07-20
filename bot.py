@@ -588,11 +588,20 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 🎯 <b>Выберите действие:</b>
 """
 
-    await update.message.reply_text(
-        welcome_text,
-        parse_mode="HTML",
-        reply_markup=get_main_menu_keyboard()
-    )
+    try:
+        with open(LOGO_PATH, 'rb') as photo:
+            await update.message.reply_photo(
+                photo=photo,
+                caption=welcome_text,
+                parse_mode="HTML",
+                reply_markup=get_main_menu_keyboard()
+            )
+    except FileNotFoundError:
+        await update.message.reply_text(
+            welcome_text,
+            parse_mode="HTML",
+            reply_markup=get_main_menu_keyboard()
+        )
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
