@@ -255,7 +255,7 @@ FAQ = """
 # ============================================
 
 PRODUCTS = {
-    "chatgpt": {
+    "chatgpt_plus": {
         "name": "🤖 ChatGPT Plus",
         "short_desc": "GPT-4o, DALL-E 3, анализ файлов",
         "description": """<b>ChatGPT Plus</b> — Премиум доступ к самым мощным моделям OpenAI
@@ -279,37 +279,54 @@ PRODUCTS = {
 
 💡 <b>Подходит для:</b> разработчиков, копирайтеров, аналитиков, студентов, бизнеса
 """,
-        "prices": """💰 <b>Тарифы:</b>
-• 1 месяц — $20
-• 3 месяца — $55 <i>(-8%)</i>
-• 6 месяцев — $100 <i>(-17%)</i>
-• 12 месяцев — $180 <i>(-25%)</i>""",
+        "prices": """💰 <b>Цена:</b>
+• 1 месяц — <b>1 990₽</b>""",
     },
-    "gemini": {
-        "name": "✨ Gemini Ultra + Veo",
-        "short_desc": "Google AI, 1M токенов, генерация видео",
-        "description": """<b>Gemini Ultra + Veo 2</b> — Флагманские модели от Google
+    "chatgpt_pro_5x": {
+        "name": "🚀 ChatGPT Pro 5x",
+        "short_desc": "5x ускорение, безлимит GPT-4o",
+        "description": """<b>ChatGPT Pro 5x</b> — Максимальная производительность OpenAI
 
 <b>Что входит в подписку:</b>
 
-🌟 <b>Gemini 1.5 Ultra</b> — Самая мощная модель Google
-• Контекст до 1 миллиона токенов
-• Работа с длинными документами
-• Мультимодальность
+⚡ <b>5x Ускорение</b>
+• В 5 раз быстрее ответы
+• Безлимитный GPT-4o
+• Приоритетный доступ
 
-🎬 <b>Veo 2</b> — Генерация видео от Google
-• Реалистичные видео до 60 секунд
-• Высокое разрешение
+🧠 <b>Все модели OpenAI</b>
+• Доступ ко всем最新 моделям
+• GPT-4o с расширенными возможностями
+• Ранний доступ к новым функциям
 
-💡 <b>Подходит для:</b> исследователей, аналитиков данных, видеокреаторов
+💡 <b>Подходит для:</b> профессионалов, интенсивной работы, бизнеса
 """,
-        "prices": """💰 <b>Тарифы:</b>
-• 1 месяц — $25
-• 3 месяца — $70 <i>(-7%)</i>
-• 6 месяцев — $130 <i>(-13%)</i>
-• 12 месяцев — $230 <i>(-24%)</i>""",
+        "prices": """💰 <b>Цена:</b>
+• 1 месяц — <b>9 800₽</b>""",
     },
-    "claude": {
+    "chatgpt_pro_20x": {
+        "name": "🔥 ChatGPT Pro 20x",
+        "short_desc": "20x ускорение, топ производительность",
+        "description": """<b>ChatGPT Pro 20x</b> — Флагманская подписка OpenAI
+
+<b>Что входит в подписку:</b>
+
+🚀 <b>20x Ускорение</b>
+• Максимальная скорость ответов
+• Безлимитный доступ ко всем моделям
+• Номера отключены (для команд)
+
+🧠 <b>Полный доступ</b>
+• Все модели и функции
+• Sora для генерации видео
+• Расширенные лимиты
+
+💡 <b>Подходит для:</b> команд, агентств, интенсивного использования
+""",
+        "prices": """💰 <b>Цена:</b>
+• 1 месяц — <b>18 900₽</b>""",
+    },
+    "claude_pro": {
         "name": "🎭 Claude Pro",
         "short_desc": "200K токенов, идеален для кода",
         "description": """<b>Claude Pro</b> — Самый умный AI-ассистент от Anthropic
@@ -327,82 +344,142 @@ PRODUCTS = {
 
 💡 <b>Подходит для:</b> программистов, писателей, консультантов
 """,
-        "prices": """💰 <b>Тарифы:</b>
-• 1 месяц — $20
-• 3 месяца — $55 <i>(-8%)</i>
-• 6 месяцев — $100 <i>(-17%)</i>
-• 12 месяцев — $180 <i>(-25%)</i>""",
+        "prices": """💰 <b>Цена:</b>
+• 1 месяц — <b>1 990₽</b>""",
     },
-    "midjourney": {
-        "name": "🎨 Midjourney",
-        "short_desc": "Шедевры изображений, все стили",
-        "description": """<b>Midjourney</b> — №1 для генерации изображений
+    "claude_max_5x": {
+        "name": "💎 Claude Max 5x",
+        "short_desc": "5x ускорение, расширенные лимиты",
+        "description": """<b>Claude Max 5x</b> — Продвинутая подписка Anthropic
 
 <b>Что входит в подписку:</b>
 
-🎨 <b>Качество Standard</b>
-• Быстрая генерация изображений
-• До ~200 изображений в месяц
-• Все художественные стили
-• Upscale до 4K
+⚡ <b>5x Ускорение</b>
+• В 5 раз быстрее ответы
+• Расширенные лимиты сообщений
+• Приоритетная поддержка
 
-💡 <b>Подходит для:</b> дизайнеров, маркетологов, художников, SMM-специалистов
+🧬 <b>Claude 3.5 + Max Features</b>
+• Все возможности Claude Pro
+• Доступ к расширенным функциям
+• Улучшенная память
+
+💡 <b>Подходит для:</b> профессионалов и команд
 """,
-        "prices": """💰 <b>Тарифы:</b>
-• Basic (200 img) — $10/мес
-• Standard — $30/мес
-• Pro — $80/мес
-• Mega — $120/мес""",
+        "prices": """💰 <b>Цена:</b>
+• 1 месяц — <b>10 900₽</b>""",
     },
-    "klingai": {
-        "name": "🎬 KlingAI",
-        "short_desc": "Профессиональная генерация видео",
-        "description": """<b>KlingAI</b> — Профессиональная видеогенерация от Kuaishou
+    "claude_max_20x": {
+        "name": "👑 Claude Max 20x",
+        "short_desc": "20x ускорение, максимальная мощь",
+        "description": """<b>Claude Max 20x</b> — Топ подписка Anthropic
 
 <b>Что входит в подписку:</b>
 
-🎬 <b>Генерация видео</b>
-• Видео до 3 минут
-• Разрешение до 1080p
-• Плавная анимация
+🚀 <b>20x Ускорение</b>
+• Максимальная скорость
+• Безлимитный доступ
+• Для интенсивной работы
 
-🖼️ <b>Изображение в видео</b>
-• Animate your image
-• Продолжение видео
+🧬 <b>Все функции Claude</b>
+• Все модели и возможности
+• Расширенные лимиты
+• Sora и видео
 
-💡 <b>Подходит для:</b> видеографов, маркетологов, контент-креаторов
+💡 <b>Подходит для:</b> команд и агентств
 """,
-        "prices": """💰 <b>Тарифы:</b>
-• Starter — $15/мес
-• Professional — $49/мес
-• Enterprise — $99/мес
-
-<i>Цены уточняйте у менеджера</i>""",
+        "prices": """💰 <b>Цена:</b>
+• 1 месяц — <b>20 450₽</b>""",
     },
-    "sora2": {
-        "name": "🎥 Sora 2",
-        "short_desc": "OpenAI видеогенератор, топ качество",
-        "description": """<b>Sora 2</b> — Революционный видеогенератор от OpenAI
+    "heygen": {
+        "name": "🎬 HeyGen Creator",
+        "short_desc": "AI видео с аватарами, безлимит",
+        "description": """<b>HeyGen Creator</b> — Профессиональная AI-видеоплатформа
 
 <b>Что входит в подписку:</b>
 
-🎥 <b>Генерация видео</b>
-• Реалистичные видео до 60 секунд
-• Самое высокое качество на рынке
-• Продвинутая физика
+🎥 <b>AI Аватары</b>
+• Создание видео с реалистичными аватарами
+• 100+ готовых аватаров
+• Custom Avatar (свой аватар)
 
-🖼️ <b>Мультимодальность</b>
-• Текст в видео
-• Изображение в видео
+🎬 <b>Безлимитный видеогенератор</b>
+• Генерация без ограничений
+• Высокое качество экспорта
+• Шаблоны и сценарии
 
-💡 <b>Подходит для:</b> кинематографистов, рекламщиков, режиссёров
+💡 <b>Подходит для:</b> маркетологов, создателей контента, бизнеса
 """,
-        "prices": """💰 <b>Тарифы:</b>
-• Starter (66 credits) — $50/мес
-• Plus (200 credits) — $200/мес
-• Pro (1000 credits) — $500/мес
+        "prices": """💰 <b>Цена:</b>
+• 1 месяц — <b>3 490₽</b>""",
+    },
+    "capcut_pro_6": {
+        "name": "✂️ CapCut Pro 6 мес",
+        "short_desc": "AI видеоредактор, 6 месяцев",
+        "description": """<b>CapCut Pro</b> — Продвинутый AI-видеоредактор от ByteDance
 
-<i>1 credit ≈ 1 секунда видео</i>""",
+<b>Что входит в подписку:</b>
+
+🎬 <b>AI Функции</b>
+• AI генерация и редактирование
+• Автоматические субтитры
+• Удаление фона
+• Масштабирование видео
+
+💎 <b>CapCut Pro Преимущества</b>
+• Без водяных знаков
+• Безлимитные экспорты
+• Расширенные инструменты
+
+💡 <b>Подходит для:</b> блогеров, SMM, маркетологов
+""",
+        "prices": """💰 <b>Цена:</b>
+• 6 месяцев — <b>3 990₽</b>""",
+    },
+    "capcut_pro_1": {
+        "name": "✂️ CapCut Pro 1 мес",
+        "short_desc": "AI видеоредактор, 1 месяц",
+        "description": """<b>CapCut Pro</b> — Продвинутый AI-видеоредактор от ByteDance
+
+<b>Что входит в подписку:</b>
+
+🎬 <b>AI Функции</b>
+• AI генерация и редактирование
+• Автоматические субтитры
+• Удаление фона
+• Масштабирование видео
+
+💎 <b>CapCut Pro Преимущества</b>
+• Без водяных знаков
+• Безлимитные экспорты
+• Расширенные инструменты
+
+💡 <b>Подходит для:</b> блогеров, SMM, маркетологов
+""",
+        "prices": """💰 <b>Цена:</b>
+• 1 месяц — <b>990₽</b>""",
+    },
+    "grok_super": {
+        "name": "🤖 Grok Super 2 мес",
+        "short_desc": "xAI Илона Маска, 2 месяца",
+        "description": """<b>Grok Super</b> — AI от xAI Илона Маска
+
+<b>Что входит в подписку:</b>
+
+🚀 <b>Grok 2 + Grok 3</b>
+• Доступ к самым новым моделям xAI
+• Анализ изображений
+• Реальное время (Realtime)
+
+💡 <b>Особенности</b>
+• Уникальный юмор и стиль
+• Анализ рентгенов и документов
+• Свободная подача информации
+
+💡 <b>Подходит для:</b> tech-энтузиастов, исследователей, фанатов Илона Маска
+""",
+        "prices": """💰 <b>Цена:</b>
+• 2 месяца — <b>1 990₽</b>""",
     },
 }
 
@@ -425,12 +502,16 @@ def get_main_menu_keyboard() -> InlineKeyboardMarkup:
 def get_catalog_keyboard() -> InlineKeyboardMarkup:
     """Каталог с выбором нейросетей"""
     keyboard = [
-        [InlineKeyboardButton("🤖 ChatGPT Plus", callback_data="product_chatgpt")],
-        [InlineKeyboardButton("✨ Gemini Ultra + Veo", callback_data="product_gemini")],
-        [InlineKeyboardButton("🎭 Claude Pro", callback_data="product_claude")],
-        [InlineKeyboardButton("🎨 Midjourney", callback_data="product_midjourney")],
-        [InlineKeyboardButton("🎬 KlingAI", callback_data="product_klingai")],
-        [InlineKeyboardButton("🎥 Sora 2", callback_data="product_sora2")],
+        [InlineKeyboardButton("🤖 ChatGPT Plus — 1 990₽", callback_data="product_chatgpt_plus")],
+        [InlineKeyboardButton("🚀 ChatGPT Pro 5x — 9 800₽", callback_data="product_chatgpt_pro_5x")],
+        [InlineKeyboardButton("🔥 ChatGPT Pro 20x — 18 900₽", callback_data="product_chatgpt_pro_20x")],
+        [InlineKeyboardButton("🎭 Claude Pro — 1 990₽", callback_data="product_claude_pro")],
+        [InlineKeyboardButton("💎 Claude Max 5x — 10 900₽", callback_data="product_claude_max_5x")],
+        [InlineKeyboardButton("👑 Claude Max 20x — 20 450₽", callback_data="product_claude_max_20x")],
+        [InlineKeyboardButton("🎬 HeyGen Creator — 3 490₽", callback_data="product_heygen")],
+        [InlineKeyboardButton("✂️ CapCut Pro 6 мес — 3 990₽", callback_data="product_capcut_pro_6")],
+        [InlineKeyboardButton("✂️ CapCut Pro 1 мес — 990₽", callback_data="product_capcut_pro_1")],
+        [InlineKeyboardButton("🤖 Grok Super 2 мес — 1 990₽", callback_data="product_grok_super")],
         [InlineKeyboardButton("◀️ Назад в меню", callback_data="back_to_menu")],
     ]
     return InlineKeyboardMarkup(keyboard)
@@ -489,18 +570,20 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     welcome_text = f"""
 🏪 <b>Добро пожаловать в VanessPay!</b>
 
-Мы предоставляем услуги по оплате подписок и ключей от ведущих AI-сервисов мира.
+Мы предоставляем услуги по оплате подписок от ведущих AI-сервисов мира.
 
-<b>🤖 Продаём подписки от:</b>
-OpenAI • Google • Anthropic • Midjourney • Kuaishou
+<b>💡 Актуальные цены:</b>
+• ChatGPT Plus — от 1 990₽
+• Claude Pro — от 1 990₽
+• Grok Super — 1 990₽
+• HeyGen Creator — 3 490₽
+• CapCut Pro — от 990₽
 
 <b>⭐ Наши преимущества:</b>
-✅ Официальные ключи
+✅ Все подписки официальные
 ✅ Активация за 5 минут
+✅ Полная гарантия
 ✅ Поддержка 24/7
-✅ Гарантия возврата
-
-📊 Уже помогли <b>2,000+</b> клиентам получить доступ к топовым AI!
 
 🎯 <b>Выберите действие:</b>
 """
@@ -634,18 +717,20 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         welcome_text = f"""
 🏪 <b>Добро пожаловать в VanessPay!</b>
 
-Мы предоставляем услуги по оплате подписок и ключей от ведущих AI-сервисов мира.
+Мы предоставляем услуги по оплате подписок от ведущих AI-сервисов мира.
 
-<b>🤖 Продаём подписки от:</b>
-OpenAI • Google • Anthropic • Midjourney • Kuaishou
+<b>💡 Актуальные цены:</b>
+• ChatGPT Plus — от 1 990₽
+• Claude Pro — от 1 990₽
+• Grok Super — 1 990₽
+• HeyGen Creator — 3 490₽
+• CapCut Pro — от 990₽
 
 <b>⭐ Наши преимущества:</b>
-✅ Официальные ключи
+✅ Все подписки официальные
 ✅ Активация за 5 минут
+✅ Полная гарантия
 ✅ Поддержка 24/7
-✅ Гарантия возврата
-
-📊 Уже помогли <b>2,000+</b> клиентам получить доступ к топовым AI!
 
 🎯 <b>Выберите действие:</b>
 """
@@ -789,15 +874,17 @@ OpenAI • Google • Anthropic • Midjourney • Kuaishou
     # --- Каталог ---
     if data == "catalog":
         catalog_text = """
-📚 <b>Каталог нейросетей</b>
+📚 <b>Каталог AI-подписок</b>
 
-Выберите продукт для просмотра подробной информации:
+Выберите продукт для просмотра описания и цен:
 
 """
         for product in PRODUCTS.values():
             name = product['name']
             short = product['short_desc']
             catalog_text += f"{name}\n📝 {short}\n\n"
+        
+        catalog_text += "\n💡 Все подписки официальные с полной гарантией!"
         
         await query.edit_message_text(
             catalog_text,
