@@ -718,26 +718,22 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # --- Главное меню ---
     if data == "back_to_menu":
-        welcome_text = f"""
-🏪 <b>Добро пожаловать в VanessPay!</b>
+        welcome_text = """🏪 Добро пожаловать в VanessPay!
 
-Мы предоставляем услуги по оплате подписок от ведущих AI-сервисов мира.
+Мы предоставляем услуги по оплате подписок и ключей от ведущих AI-сервисов мира.
 
-<b>💡 Актуальные цены:</b>
-• ChatGPT Plus — от 1 990₽
-• Claude Pro — от 1 990₽
-• Grok Super — 1 990₽
-• HeyGen Creator — 3 490₽
-• CapCut Pro — от 990₽
+🤖 Продаём подписки от:
+OpenAI • Google • Anthropic • Midjourney • Kuaishou
 
-<b>⭐ Наши преимущества:</b>
-✅ Все подписки официальные
+⭐ Наши преимущества:
+✅ Официальные ключи
 ✅ Активация за 5 минут
-✅ Полная гарантия
 ✅ Поддержка 24/7
+✅ Гарантия возврата
 
-🎯 <b>Выберите действие:</b>
-"""
+📊 Уже помогли 2,000+ клиентам получить доступ к топовым AI!
+
+🎯 Выберите действие:"""
         await query.edit_message_text(
             welcome_text,
             parse_mode="HTML",
